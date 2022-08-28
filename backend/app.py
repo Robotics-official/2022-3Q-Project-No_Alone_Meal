@@ -1,6 +1,8 @@
 from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 
+import os
+
 app = Flask(__name__)
 
 # /// = relative path, //// = absolute path
@@ -27,14 +29,24 @@ def add():
     new_todo = Todo(title=title, complete=False)
     db.session.add(new_todo)
     db.session.commit()
+    f = open("newquest.txt", 'w')
+    f.close()
     return redirect(url_for("home"))
 
+@app.route("/quest")
+def quest():
+    if os.path.exists('./newquest.txt'):
+        return "ARRIVE"
+    else:
+        return "NOTHING"
 
 @app.route("/update/<int:todo_id>")
 def update(todo_id):
     todo = Todo.query.filter_by(id=todo_id).first()
     todo.complete = not todo.complete
     db.session.commit()
+    if os.path.exists('./newquest.txt'):
+        os.remove('./newquest.txt')
     return redirect(url_for("home"))
 
 
@@ -43,6 +55,8 @@ def delete(todo_id):
     todo = Todo.query.filter_by(id=todo_id).first()
     db.session.delete(todo)
     db.session.commit()
+    if os.path.exists('./newquest.txt'):
+        os.remove('./newquest.txt')
     return redirect(url_for("home"))
 
 if __name__ == "__main__":
