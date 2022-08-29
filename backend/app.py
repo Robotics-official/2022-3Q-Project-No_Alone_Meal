@@ -20,7 +20,11 @@ class Todo(db.Model):
 @app.route("/")
 def home():
     todo_list = Todo.query.all()
-    return render_template("base.html", todo_list=todo_list)
+    try:
+        todo = todo_list[-1]
+    except:
+        todo = todo_list[0]
+    return render_template("base.html", todo=todo)
 
 
 @app.route("/add", methods=["POST"])
@@ -40,9 +44,10 @@ def quest():
     else:
         return "NOTHING"
 
-@app.route("/update/<int:todo_id>")
-def update(todo_id):
-    todo = Todo.query.filter_by(id=todo_id).first()
+@app.route("/update")
+def update():
+    todo_list = Todo.query.all()
+    todo = todo_list[-1]
     todo.complete = not todo.complete
     db.session.commit()
     if os.path.exists('./newquest.txt'):
@@ -50,9 +55,10 @@ def update(todo_id):
     return redirect(url_for("home"))
 
 
-@app.route("/delete/<int:todo_id>")
-def delete(todo_id):
-    todo = Todo.query.filter_by(id=todo_id).first()
+@app.route("/delete")
+def delete():
+    todo_list = Todo.query.all()
+    todo = todo_list[-1]
     db.session.delete(todo)
     db.session.commit()
     if os.path.exists('./newquest.txt'):

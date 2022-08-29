@@ -33,16 +33,16 @@
                 <div class="description">
                     <div style="text-align: center;" class="ui segment">
                         <label>&nbsp;</label>
-                        <label style="font-size: large;">{{ todo_list[-1].title }}</label>
+                        <label style="font-size: large;">{{ todo.title }}</label>
                         <br><br>
-                        {% if todo_list[-1].complete == False %}
+                        {% if todo.complete == False %}
                         <span class="ui button">요청중</span>
                         {% else %}
                         <span class="ui positive button">매칭완료</span>
                         {% endif %}
                         <br><br>
-
                     </div>
+                    <div style="text-align: center;"><a href="/" style="color:rgb(64, 11, 117)">새로고침</a></div>
                 </div>
             </div>
             <div class="extra content">

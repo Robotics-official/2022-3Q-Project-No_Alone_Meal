@@ -1,17 +1,34 @@
+import RPi.GPIO as GPIO
+import time
 
-import json, requests
+accept_button=10
+decline_button=11
+
+GPIO.setmode(GPIO.BOARD)
+GPIO.setup(accept_button, GPIO.IN)
+GPIO.setup(decline_button, GPIO.IN)
+
+import requests
 import playsound
 
-url = requests.get("https://jsonplaceholder.typicode.com/users")
-text = url.text
+raw_quest = requests.get("http://127.0.0.1:5000/quest")
+newquest=raw_quest.text
 
-data = json.loads(text)
-
-user = data[0]
-
-user = data[0]
-signal = user['name']
-
-if signal=='Leanne Graham':
+if newquest=='ARRIVE':
     playsound.playsound('./audio/canwe.wav')
+    while True:
+        accept = GPIO.input(accept_button)
+        decline = GPIO.input(decline_button)
+        if accept == 0:
+            requests.get("http://127.0.0.1:5000/update")
+            playsound.playsound('./audio/yes.wav')
+            break
+        if decline == 0:
+            playsound.playsound('./audio/no.wav')
+            break
+        
+        
+            
+                  
     
+
