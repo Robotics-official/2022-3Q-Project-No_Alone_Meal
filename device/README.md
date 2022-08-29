@@ -11,3 +11,6 @@
 * sudo apt install libgirepository1.0-dev
 * pip install pycairo
 * pip install pygobject
+
+# Make it Run
+* python device.py
